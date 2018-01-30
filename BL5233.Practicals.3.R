@@ -38,7 +38,6 @@ summary(model2)
 summary(model3)
 summary(model4)
 
-listModels <- list(model1, model2, model3, model4)
-
 # 7. Extract the coefficients from all models and put them in a list.
+listModels <- list(model1, model2, model3, model4)
 
