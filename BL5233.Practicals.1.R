@@ -1,4 +1,6 @@
-# BL5233: Exercise 1
+# BL5233: Tutorial 1
+
+# Exercise A 
 
 # Load library
 library(dplyr)
