@@ -1,7 +1,9 @@
 # On regression
 
+
+# Linear regression
 setwd("/Users/dondealban/Desktop/BL5233/Datasets/")
-data <- read.table(file="regression.txt", header=TRUE, sep="\t")
+data1 <- read.table(file="regression.txt", header=TRUE, sep="\t")
 
 # Regression
 model1 <- lm(growth ~ tannin, data=data)
@@ -32,6 +34,7 @@ lines(log(area), predict(model2, list(Area=area)))
 
     # Homework: Then, compare the two models by using AIC or ANOVA test
 
+
 # Non-linear regression
 deer <- read.table(file="jaws.txt", header=TRUE, sep="\t")
 names(deer)
@@ -48,3 +51,24 @@ AIC(model3, model4)
 
   # Note: Result of AIC or the difference between two AICs is very close... 
   # Then, think about how significant is the difference?
+
+
+# Multiple regression
+data3 <- read.table(file="ozone.data.txt", header=TRUE, sep="\t")
+names(data3)
+pairs(data3, panel=panel.smooth)
+
+model5 <- lm(ozone~temp*wind*rad +I(rad^2)+I(temp^2)+I(wind^2), data=data3)
+summary(model5)
+# Remove most complex model (three-way interaction) first
+model5a <- update(model5, ~. -temp:wind:rad)
+anova(model5, model5a)
+summary(model5a)
+
+  # Homework: keep removing complex models by step-wise simplification
+
+# Stepwise selection of models
+modelStep <- step(model5)
+summary(modelStep)
+
+
