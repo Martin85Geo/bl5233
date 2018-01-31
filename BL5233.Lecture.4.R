@@ -71,4 +71,6 @@ summary(model5a)
 modelStep <- step(model5)
 summary(modelStep)
 
+  # Homework: model selection using information theory
+
 
