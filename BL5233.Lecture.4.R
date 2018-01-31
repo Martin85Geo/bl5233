@@ -11,3 +11,7 @@ anova(model1)
 # Prediction
 plot(data$tannin, data$growth, xlab="tannin", ylab="growth")
 lines(seq(0,8,0.1), predict(model1,list(tannin=seq(0,8,0.1))))
+
+# Model checking
+par(mfrow=c(2,2))
+plot(model1)
