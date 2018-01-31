@@ -30,4 +30,21 @@ area=sort(unique(data2$Area))
 plot(log(data2$Species)~log(data2$Area ))
 lines(log(area), predict(model2, list(Area=area)))
 
-    # Then, compare the two models by using AIC or ANOVA test
+    # Homework: Then, compare the two models by using AIC or ANOVA test
+
+# Non-linear regression
+deer <- read.table(file="jaws.txt", header=TRUE, sep="\t")
+names(deer)
+plot(deer$age,deer$bone)
+
+# Try asymptotic exponential model
+model3 <- nls(bone~a-b*exp(-c*age), start=list(a=120, b=115, c=0.065), data=deer)
+summary(model3)
+# Try Michaelis-Menten model
+model4 <-nls(bone~a*age/(1+b*age), start=list(a=10.6, b=0.06), data=deer)
+summary(model4)
+# Compare the two models (which one is better)
+AIC(model3, model4) 
+
+  # Note: Result of AIC or the difference between two AICs is very close... 
+  # Then, think about how significant is the difference?
