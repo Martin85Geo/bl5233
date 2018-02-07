@@ -1,7 +1,7 @@
 # On ANOVA
 
 
-# Linear regression
+# Prepare data
 setwd("/Users/dondealban/Desktop/BL5233/Datasets/")
 dataY <- read.table(file="yields.txt", header=TRUE, sep="\t")
 
@@ -12,3 +12,8 @@ cbind(y, soil)
 
 # Plot
 plot(soil,y,names=c("sand","clay","loam"), ylab="yield")
+
+# ANOVA
+model1 <- aov(y~soil)
+summary(model1)
+
