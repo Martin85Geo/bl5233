@@ -16,4 +16,8 @@ plot(soil,y,names=c("sand","clay","loam"), ylab="yield")
 # ANOVA
 model1 <- aov(y~soil)
 summary(model1)
+plot(model1)
+summary.lm(aov(y~soil))
 
+# Factorial experiments
+weights <- read.table(file="growth.txt", header=TRUE, sep="\t")
