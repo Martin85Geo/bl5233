@@ -74,3 +74,5 @@ t.test(regrowth$Fruit~regrowth$Grazing)
 model7 <- lm(Fruit~Grazing*Root, data=regrowth)
 model8 <- update(model7, ~ .- Grazing:Root)
 anova(model7,model8)
+
+    # Homework: multiple comparisons
