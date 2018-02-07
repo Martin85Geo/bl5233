@@ -21,3 +21,24 @@ summary.lm(aov(y~soil))
 
 # Factorial experiments
 weights <- read.table(file="growth.txt", header=TRUE, sep="\t")
+
+barplot(tapply(weights$gain, list(weights$diet, weights$supplement), mean),
+        beside=T, ylim=c(0,30), col=rainbow(3), legend.text=T, args.legend=list(x="top"))
+
+tapply(weights$gain, list(weights$diet, weights$supplement), mean)
+
+model2 <- aov(gain~diet*supplement, data=weights)
+summary(model2)
+
+summary.lm(model2)
+
+# Main effects only, no interactions
+model3 <- aov(gain~diet+supplement, data=weights) 
+summary.lm(model3)
+
+# Contrasts
+
+clip <- read.table(file="clipping.txt", header=TRUE, sep="\t")
+names(clip)
+plot(clip$clipping, clip$biomass ,xlab="Competition treatment", ylab="Biomass")
+
