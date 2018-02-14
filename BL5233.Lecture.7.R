@@ -133,3 +133,59 @@ sp + geom_point()
 sp + geom_point(alpha=.1) 
 sp + geom_point(alpha=.01)
 
+sp + stat_bin2d()
+sp + stat_bin2d(bins=50) + 
+  scale_fill_gradient(low="lightb lue", high="red", limits=c(0, 6000))
+
+# Adding fitted regression model lines
+sp <- ggplot(heightweight, aes(x=ageYear, y=heightIn)) 
+sp + geom_point() + stat_smooth(method=lm)
+# 99% confidence region
+sp + geom_point() + stat_smooth(method=lm, level=0.99)
+
+sp + geom_point(colour="grey60") + stat_smooth()
+sp + geom_point(colour="grey60") + stat_smooth(method=loess)
+
+# GLM with binomial errors
+library(MASS) # For the data set
+b <- biopsy
+b$classn[b$class=="benign"] <- 0 
+b$classn[b$class=="malignant"] <- 1
+ggplot(b, aes(x=V1, y=classn)) + 
+  geom_point(position=position_jitter(width=0.3, height=0.06), alpha=0.4, shape=21, size=1.5) + 
+  stat_smooth(method=glm, method.args = list(family = "binomial"))
+
+sps <- ggplot(heightweight, aes(x=ageYear, y=heightIn, colour=sex)) + 
+  geom_point() + 
+  scale_colour_brewer(palette="Set 1")
+sps + geom_smooth()
+
+# Adding fitted lines from an existing model
+model <- lm(heightIn ~ ageYear + I(ageYear^2), heightweight)
+xmin <- min(heightweight$ageYear)
+xmax <- max(heightweight$ageYear)
+predicted <- data.frame(ageYear=seq(xmin, xmax, length.out=100)) 
+predicted$heightIn <- predict(model, predicted)
+sp <- ggplot(heightweight, aes(x=ageYear, y=heightIn)) + geom_point(colour="grey40")
+sp + geom_line(data=predicted, size=1)
+
+# Making multiple histograms with grouped data
+library(MASS)
+ggplot(birthwt, aes(x=bwt)) +
+  geom_histogram(fill="white", colour="black") +
+  facet_grid(smoke ~ .)
+
+birthwt1 <- birthwt
+birthwt1$smoke <- factor(birthwt1$smoke) levels(birthwt1$smoke) 
+library(plyr) # For the revalue() function
+birthwt1$smoke <- revalue(birthwt1$smoke, c("0"="No Smoke", "1"="Smoke")) 
+ggplot(birthwt1, aes(x=bwt)) + 
+  geom_histogram(fill="white", colour="black") + 
+  facet_grid(smoke ~ .)
+
+# Making a violin plot
+p <- ggplot(heightweight, aes(x=sex, y=heightIn))
+p + geom_violin()
+p + geom_violin() + geom_boxplot(width=.1, fill="black", outlier.colour=NA) + 
+  stat_summary(fun.y=median, geom="point", fill="white", shape=21, size=2.5)
+
