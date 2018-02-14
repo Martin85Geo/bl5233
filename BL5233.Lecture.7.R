@@ -61,3 +61,45 @@ ggplot(upc, aes(x=Abb, y=Change, fill=Region)) + geom_bar(stat="identity")
 ggplot(upc, aes(x=reorder(Abb, Change), y=Change, fill=Region)) + 
   geom_bar(stat="identity", colour="black") + 
   scale_fill_manual(values=c("#669933", "#FFCC66")) + xlab("State")
+
+# Negative bars of different color
+csub <- subset(climate, Source=="Berkeley" & Year >= 1900) 
+csub$pos <- csub$Anomaly10y >= 0
+ggplot(csub, aes(x=Year, y=Anomaly10y, fill=pos)) + 
+  geom_bar(stat="identity", position="identity")
+
+# Change colors manually
+ggplot(csub, aes(x=Year, y=Anomaly10y, fill=pos)) +
+  geom_bar(stat="identity", position="identity", colour="black", size=0.25) +
+  scale_fill_manual(values=c("#CCEEFF", "#FFDDDD"), guide=FALSE)
+
+# Adding labels to a graph
+ggplot(cabbage_exp, aes(x=interaction(Date, Cultivar), y=Weight)) + 
+  geom_bar(stat="identity") + geom_text(aes(label=Weight), vjust=-0.4)
+
+# Dotplots
+tophit <- tophitters2001[1:25, ]
+ggplot(tophit, aes(x=avg, y=reorder(name, avg))) +
+  geom_point(size=3) +
+  theme_bw() + theme(panel.grid.major.x = element_blank(),
+                     panel.grid.minor.x = element_blank(),
+                     panel.grid.major.y = element_line(colour="grey100", linetype="dashed"))
+
+# Making a line graph with multiple lines
+library(plyr)
+data(ToothGrowth)
+tg <- ddply(ToothGrowth, c("supp", "dose"), summarise, length=mean(len)) 
+ggplot(tg, aes(x=dose, y=length, colour=supp)) + geom_line()
+
+ggplot(tg, aes(x=dose, y=length, linetype=supp)) + geom_line()
+
+ggplot(tg, aes(x=dose, y=length, fill=supp)) +
+  geom_line() + geom_point(size=4, shape=21)
+
+# Making a stacked area graph
+ggplot(uspopage, aes(x=Year, y=Thousands, fill=AgeGroup)) + geom_area()
+
+ggplot(uspopage, aes(x=Year, y=Thousands, fill=AgeGroup)) +
+  geom_area(colour="black", size=.2, alpha=.4) + scale_fill_brewer(palette="Blues", breaks=rev(levels(uspopage$AgeGroup)))
+
+# Adding a confidence region
