@@ -189,3 +189,43 @@ p + geom_violin()
 p + geom_violin() + geom_boxplot(width=.1, fill="black", outlier.colour=NA) + 
   stat_summary(fun.y=median, geom="point", fill="white", shape=21, size=2.5)
 
+# Adding lines
+p <- ggplot(heightweight, aes(x=ageYear, y=heightIn, colour=sex)) + geom_point()
+# Add horizontal and vertical lines
+p + geom_hline(yintercept=60) + geom_vline(xintercept=14)
+# Add angled line
+p + geom_abline(intercept=37.4, slope=1.75)
+
+# Adding error bars
+# With a bar graph
+a = ggplot(ce, aes(x=Date, y=Weight)) + 
+  geom_bar(stat= "identity",fill="white", colour="black") + 
+  geom_errorbar(aes(ymin=Weight-se, ymax=Weight+se), width=.2)
+# With a line graph
+b = ggplot(ce, aes(x=Date, y=Weight)) + geom_line(aes(group=1)) + geom_point(size=4) + geom_errorbar(aes(ymin=Weight-se, ymax=Weight+se), width=.2)
+
+ggplot(cabbage_exp, aes(x=Date, y=Weight, fill=Cultivar)) + 
+  geom_bar(stat= "identity",position="dodge") + 
+  geom_errorbar(aes(ymin=Weight-se, ymax=Weight+se), position=position_dodge(0.9), width=.2)
+
+# Using grid package to put plots together
+library(grid)
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(1, 2)))
+vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
+print(a, vp = vplayout(1, 1))
+print(b, vp = vplayout(1, 2))
+
+# Swapping x- and y-axes
+data(PlantGrowth)
+PlantGrowth <- as.data.frame(data(PlantGrowth))
+ggplot(PlantGrowth, aes(x=group, y=weight)) + 
+  geom_boxplot() ggplot(PlantGrowth, aes(x=group, y=weight)) + 
+  geom_boxplot() + coord_flip()
+
+# Splitting data into subplots with facets
+p <- ggplot(mpg, aes(x=displ, y=hwy)) + geom_point()
+# Faceted by drv, in vertically 40 arranged subpanels
+p + facet_grid(drv ~ .)
+
+
