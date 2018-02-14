@@ -126,3 +126,10 @@ ggplot(heightweight, aes(x=ageYear, y=heightIn, size=weightLb, colour=sex)) +
   geom_point(alpha=.5) +
   scale_size_area() + 
   scale_colour_brewer(palette="Set1")
+
+# Dealing with overplotting
+sp <- ggplot(diamonds, aes(x=carat, y=price))
+sp + geom_point()
+sp + geom_point(alpha=.1) 
+sp + geom_point(alpha=.01)
+
