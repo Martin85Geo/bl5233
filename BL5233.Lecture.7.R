@@ -216,9 +216,7 @@ vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
 print(a, vp = vplayout(1, 1))
 print(b, vp = vplayout(1, 2))
 
-# Swapping x- and y-axes
-data(PlantGrowth)
-PlantGrowth <- as.data.frame(data(PlantGrowth))
+# Swapping x- and y-axes (Note: can't find PlantGrowth data)
 ggplot(PlantGrowth, aes(x=group, y=weight)) + 
   geom_boxplot() ggplot(PlantGrowth, aes(x=group, y=weight)) + 
   geom_boxplot() + coord_flip()
