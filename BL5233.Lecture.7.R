@@ -34,6 +34,30 @@ library(gcookbook)
 library(ggplot2)
 library(grid)
 
+# Comparing plot in Base R and in ggplot2
+plot(mtcars$wt, mtcars$mpg)
+ggplot(mtcars, aes(x=wt, y=mpg)) + geom_point()
 
+ggplot(BOD, aes(x=Time, y=demand)) + geom_bar(stat="identity")
 
+# Histogram
+hist(mtcars$mpg, breaks=10)
+ggplot(mtcars, aes(x=mpg)) + geom_histogram(binwidth=4)
 
+# Boxplot
+boxplot(len ~ supp, data = ToothGrowth)
+  
+boxplot(len ~ supp + dose, data = ToothGrowth)
+ggplot(ToothGrowth, aes(x=supp, y=len)) + geom_boxplot()
+ggplot(ToothGrowth, aes(x=interaction(supp, dose), y=len)) + geom_boxplot()
+
+# Dodge makes the bars to be beside each other
+ggplot(cabbage_exp, aes(x=Date, y=Weight, fill=Cultivar)) + 
+  geom_bar(stat="identity",position="dodge")
+
+# Change colors of the bar chart
+upc <- subset(uspopchange, rank(Change)>40)
+ggplot(upc, aes(x=Abb, y=Change, fill=Region)) + geom_bar(stat="identity")
+ggplot(upc, aes(x=reorder(Abb, Change), y=Change, fill=Region)) + 
+  geom_bar(stat="identity", colour="black") + 
+  scale_fill_manual(values=c("#669933", "#FFCC66")) + xlab("State")
