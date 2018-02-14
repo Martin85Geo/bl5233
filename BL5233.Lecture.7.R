@@ -103,3 +103,18 @@ ggplot(uspopage, aes(x=Year, y=Thousands, fill=AgeGroup)) +
   geom_area(colour="black", size=.2, alpha=.4) + scale_fill_brewer(palette="Blues", breaks=rev(levels(uspopage$AgeGroup)))
 
 # Adding a confidence region
+clim <- subset(climate, Source == "Berkeley", select=c("Year", "Anomaly10y", "Unc10y"))
+# Shaded region
+ggplot(clim, aes(x=Year, y=Anomaly10y)) + 
+  geom_ribbon(aes(ymin=Anomaly10y- Unc10y, ymax=Anomaly10y+Unc10y), alpha=0.2) + 
+  geom_line()
+
+# Making a scatterplot
+ggplot(heightweight, aes(x=ageYear, y=heightIn)) + geom_point(shape=21)
+ggplot(heightweight, aes(x=ageYear, y=heightIn, colour=sex)) + geom_point()
+ggplot(heightweight, aes(x=ageYear, y=heightIn, shape=sex, colour=sex)) + geom_point()
+
+ggplot(heightweight, aes(x=ageYear, y=heightIn, shape=sex, colour=sex)) + 
+  geom_point() + 
+  scale_shape_manual(values= c(1,2)) + 
+  scale_colour_manual(values= c("red","blue"))
