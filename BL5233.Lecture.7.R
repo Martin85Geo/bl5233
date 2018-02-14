@@ -118,3 +118,11 @@ ggplot(heightweight, aes(x=ageYear, y=heightIn, shape=sex, colour=sex)) +
   geom_point() + 
   scale_shape_manual(values= c(1,2)) + 
   scale_colour_manual(values= c("red","blue"))
+
+ggplot(heightweight, aes(x=ageYear, y=heightIn, colour=weightLb)) + geom_point()
+
+# Mapping a Continuous Variable to Color or Size: both continuous and categorical
+ggplot(heightweight, aes(x=ageYear, y=heightIn, size=weightLb, colour=sex)) +
+  geom_point(alpha=.5) +
+  scale_size_area() + 
+  scale_colour_brewer(palette="Set1")
