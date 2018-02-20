@@ -69,6 +69,7 @@ summary(model1)
 model2 <- glm(Species~Biomass+pH, poisson, data=species)
 anova(model1, model2, test="Chi")
 
+# Plot the fit of the model
 xv <- seq(0,10,0.1)
 phv <- rep("high",length(xv))
 yv <- predict(model1, list(pH=factor(phv), Biomass=xv), type="response")
@@ -80,4 +81,49 @@ phv <- rep("low",length(xv))
 yv <- predict(model1, list(pH=factor(phv), Biomass=xv), type="response")
 lines(xv,yv)
 
+# Logistic regression with binomial errors
+numbers <- read.table(file="sexratio.txt", header=TRUE)
+numbers
+par(mfrow=c(1,2))
+p <- numbers$males/(numbers$males+numbers$females)
+plot(numbers$density, p, ylab="Proportion male")
+plot(log(numbers$density), p, ylab="Proportion male")
+
+y <- cbind(numbers$males, numbers$females)
+model <- glm(y~density, binomial, data=numbers)
+model
+
+# Note: theresidual deviance is grater than the degrees of freedom; hence we try
+# transforming the density with logs to improve the fit. Then, do diagnostic plots.
+
+par(mfrow=c(1,1))
+xv <- seq(0,6,0.1)
+plot(log(numbers$density), p, ylab="Proportion male")
+lines(xv, predict(model, list(density=exp(xv)), type="response"))
+
+# Proportion data with categorical explanatory variables
+germination <- read.table(file="germination.txt", header=TRUE)
+names(germination)
+
+y <- cbind(germination$count, germination$sample - germination$count)
+levels(germination$Orobanche)
+
+model <- glm(y ~ Orobanche * extract, binomial, data=germination)
+summary(model)
+# Correct for overdispersion
+model <- glm(y ~ Orobanche * extract, quasibinomial, data = germination)
+summary(model)
+# Remove interactions
+model2 <- update(model,~.-Orobanche:extract)
+anova(model,model2,test="F")
+summary(model2)
+
+model3 <- update(model2,~.-Orobanche)
+anova(model2,model3,test="F")
+coef(model3)
+1/(1+1/(exp(-0.5122))) # 0.3746779
+1/(1+1/(exp(-0.5122+1.0574))) # 0.6330212
+tapply(predict(model3,type="response"), germination$extract,mean)
+
+  # Homework: then use diagnostic plots to test
 
