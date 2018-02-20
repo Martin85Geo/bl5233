@@ -40,3 +40,44 @@ anova(model2, model3, test="F")
 
 model4 <- update(model3,~. - sex:age:weight) # 3-way interaction
 anova(model3, model4, test="F")
+
+    # Homework: continue to simplify model then test with ANOVA
+
+# Plot to see interactions graphically
+barplot(tapply(count$cells, list(count$smoker,count$weight),mean), col=c(2,7), beside=T)
+legend(1.2,3.4,c("non","smoker"), fill=c(2,7))
+
+    # Homework: follow-up using diagnostic plots
+
+# ANCOVA with count data within the GLM framework
+species <- read.table(file="species.txt", header=TRUE, sep="\t")
+plot(species$Biomass, species$Species, type="n")
+spp <- split(species$Species, species$pH)
+bio <- split(species$Biomass, species$pH)
+
+points(bio[[1]],spp[[1]],pch=16)
+points(bio[[2]],spp[[2]],pch=17)
+points(bio[[3]],spp[[3]])
+legend("topright",1,legend=c( "high","low","mid"),pch=c(16, 17,1))
+
+model1 <- glm(Species~ Biomass*pH, poisson, data=species)
+summary(model1)
+
+  # Note: there is no probelm of overdispersion, but one of the interactions is not
+  # significant; hence need to simplify the model
+
+model2 <- glm(Species~Biomass+pH, poisson, data=species)
+anova(model1, model2, test="Chi")
+
+xv <- seq(0,10,0.1)
+phv <- rep("high",length(xv))
+yv <- predict(model1, list(pH=factor(phv), Biomass=xv), type="response")
+lines(xv,yv)
+phv <- rep("mid",length(xv))
+yv <- predict(model1, list(pH=factor(phv), Biomass=xv), type="response")
+lines(xv,yv)
+phv <- rep("low",length(xv))
+yv <- predict(model1, list(pH=factor(phv), Biomass=xv), type="response")
+lines(xv,yv)
+
+
