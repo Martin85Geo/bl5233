@@ -7,7 +7,6 @@
 
 # 1. Read the dataset “quine” from the MASS library into R. Check the names. Check the 
 # levels of the categorical variables.
-
 library(MASS)
 setwd("/Users/dondealban/Desktop/BL5233/Datasets/")
 data(quine)
@@ -19,16 +18,29 @@ levels(quine$Lrn)
 
 # 2. Given that the response variable is a count, choose the appropriate model. Fit a
 # maximal model.
-
 model1 <- glm(Days ~ Eth*Sex*Age*Lrn, poisson, data=quine)
+
+# 3. Check whether the model has overdispersion.
 summary(model1)
 
   # Result of summary shows residual deviance is higher than the degrees of freedom,
   # which indicates overdispersion (or extra unexplained variation in the response).
   # Hence, need to use a quasi-Poisson error structure to correct for overdispersion.
 
-model2 <- glm(Days ~ Eth*Sex*Age*Lrn, poisson, data=quine)
-summary(model1)
+# 4. Fit a new model correcting for overdispersion.
+model2 <- glm(Days ~ Eth*Sex*Age*Lrn, quasipoisson, data=quine)
+summary(model2)
 
+# 5. Simplify the model. To proceed to simplify the model we start removing the most 
+# complicated terms. Neither AIC nor step() are defined for quasi-likelihood so we 
+# simplify manually one step at a time.
 
+model3a <- update(model2, ~. -Eth:Sex:Age:Lrn)
+anova(model2, model3a, test="F")
+
+model3b <- update(model3a, ~. -Sex:Age:Lrn)
+anova(model3a, model3b, test="F")
+
+model3c <- update(model3b, ~. -Eth:Age:Lrn)
+anova(model3b, model3c, test="F")
 
