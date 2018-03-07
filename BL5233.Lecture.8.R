@@ -162,3 +162,24 @@ Depth16 <- ISIT$SampleDepth[ISIT$Station == 16]
 plot(Depth16, Sources16, type = "p")
 M3 <- gam(Sources16 ~ s(Depth16, fx = FALSE, k=-1, bs="cr"))
 plot(M3, se=TRUE)
+
+M3pred <- predict(M3, se=TRUE, type="response")
+plot(Depth16, Sources16, type="p")
+I1 <- order(Depth16)
+lines(Depth16[I1], M3pred$fit[I1], lty=1)
+lines(Depth16[I1], M3pred$fit[I1]+2*M3pred$se[I1], lty=2)
+lines(Depth16[I1], M3pred$fit[I1]-2*M3pred$se[I1], lty=2)
+
+# Try GAM with Ozone data
+ozone.data <- read.table(file="ozone.data.txt", header=TRUE, sep="\t")
+names(ozone.data)
+
+model <- gam(ozone~s(rad)+s(temp)+s(wind), data=ozone.data)
+summary(model)
+
+model2 <- gam(ozone~s(temp)+s(wind), data=ozone.data) 
+anova(model, model2, test="F")
+
+model3 <- gam(ozone~s(temp)+s(wind)+s(rad )+s(wind,temp), data=ozone.data)
+par(mfrow=c(2,2))
+plot(model3, residuals=T, pch=16)
