@@ -36,11 +36,19 @@ summary(model2)
 # simplify manually one step at a time.
 
 model3a <- update(model2, ~. -Eth:Sex:Age:Lrn)
-anova(model2, model3a, test="F")
+anova(model2, model3a, test="F") # p=0.6911 -> not significant hence can remove
 
 model3b <- update(model3a, ~. -Sex:Age:Lrn)
-anova(model3a, model3b, test="F")
+anova(model3a, model3b, test="F") # p=0.1715 -> not significant hence can remove
 
 model3c <- update(model3b, ~. -Eth:Age:Lrn)
-anova(model3b, model3c, test="F")
+anova(model3b, model3c, test="F") # p=0.08937
 
+model3d <- update(model3b, ~. -Eth:Sex:Lrn)
+anova(model3b, model3d, test="F") # p=0.0.0468
+
+model3e <- update(model3b, ~. -Eth:Sex:Age)
+anova(model3b, model3e, test="F") # p=0.6223 -> not significant hence can remove
+
+model3f <- update(model3e, ~. -Age:Lrn)
+anova(model3e, model3f, test="F") # p=0 
