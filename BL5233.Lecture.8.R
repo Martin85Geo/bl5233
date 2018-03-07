@@ -80,3 +80,44 @@ for (i in 1:n) {
 death <- c(death1,death2)
 factory <- factor(c(rep(1,n), rep(2,n)))
 plot(factory, death)
+
+model1 <- glm(death~factory, Gamma)
+summary(model1)
+
+survivingA = n-cumsum(table(death1))
+survivingB = n-cumsum(table(death2))
+plot(survivingA~sort(unique(death1)),type="l",col="blue",xlab="day",ylab="number surviving")
+lines(survivingB~sort(unique(death2)),type="l",col="red")
+legend(40,800,c("sps A","sps B"),lty=c(1,1), col=c("blue","red"))
+
+# Survivorshp types
+costRate = rep(0.2,days)
+
+failRateIncr = costRate*exp(0.01*daysSeq)
+death1 <-numeric(n)
+for (i in 1:n) {
+  rnos <- runif(length(failRateIncr))
+  death1[i] <- which(rnos <= failRateIncr)[1]
+}
+death2 <- numeric(n)
+for (i in 1:n) { 
+  rnos <- runif(length(costRate))
+  death2[i] <- which(rnos <= costRate)[1]
+}
+death3 <-numeric(n)
+for (i in 1:n) { 
+  rnos<-runif(length(failRateDecr))
+  death3[i]<- which(rnos <= failRateDecr)[1] 
+}
+
+surviving1 = n-cumsum(table(death1)) 
+surviving2 = n-cumsum(table(death2))
+surviving3 = n-cumsum(table(death3))
+plot(log(surviving1+1)~sort(unique(death1)), type="l",col="blue",xlim=c (1,days), xlab="day",ylab="log of number surviving")
+lines(log(surviving2+1)~sort(unique(death2)), type="l",col="red")
+lines(log(surviving3+1)~sort(unique(death3)), type="l",col="black")
+
+# Hazard, survivor and density functions
+library(survival)
+insects <- read.table(file="roaches.txt", header=TRUE, sep="\t")
+names(roaches)
