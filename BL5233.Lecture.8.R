@@ -134,3 +134,31 @@ summary(model2)
 
 anova(model1, model2)
 AIC(model1, model2)
+
+model3 <- step(model2)
+summary(model3)
+
+model10 <- coxph(Surv(death,status) ~ weight*group,data=insects)
+summary(model10)
+model11 <- step(model10)
+summary(model11)
+
+tapply(insects$death, insects$group, mean)
+23.08/8.02
+23.08/14.42
+plot(survfit(model11))
+legend(35,0.8, c("Group A","Group B","Group C"), lty=c(2,1,2))
+
+
+# Generalised Additive Models
+library(mgcv)
+
+# Bioluminescence Example
+ISIT <- read.table(file="ISIT.txt", header=TRUE, sep="\t")
+names(ISIT)
+op <- par(mfrow = c(2, 2), mar = c(5, 4, 1, 2))
+Sources16 <- ISIT$Sources[ISIT$Station == 16]
+Depth16 <- ISIT$SampleDepth[ISIT$Station == 16]
+plot(Depth16, Sources16, type = "p")
+M3 <- gam(Sources16 ~ s(Depth16, fx = FALSE, k=-1, bs="cr"))
+plot(M3, se=TRUE)
