@@ -121,3 +121,16 @@ lines(log(surviving3+1)~sort(unique(death3)), type="l",col="black")
 library(survival)
 insects <- read.table(file="roaches.txt", header=TRUE, sep="\t")
 names(roaches)
+
+plot(survfit(Surv(insects$death,insects$status) ~ insects$group),
+     lty=c(1,3,5),col=c("blue","orange","black"),
+     ylab="Survivorship",xlab="Time")
+
+model1 <- survreg(Surv(death,status) ~ weight*group, dist="exponential", data=insects)
+summary(model1)
+
+model2 <- survreg(Surv(death,status) ~ weight*group, data=insects)
+summary(model2)
+
+anova(model1, model2)
+AIC(model1, model2)
