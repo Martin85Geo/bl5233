@@ -68,3 +68,28 @@ E1 <- resid(M.gls4)
 coplot(E1 ~ DML | fMONTH, ylab = "Ordinary residuals", data = Squid)
 E2 <- resid(M.gls4, type = "normalized")
 coplot(E2 ~ DML | fMONTH, data = Squid, ylab = "Normalised residuals")
+
+
+# Temporal correlation
+Hawaii <- read.table(file="Hawaii.txt", header=TRUE, sep="\t")
+names(Hawaii)
+Hawaii$Birds <- sqrt(Hawaii$Moorhen.Kauai)
+plot(Hawaii$Year, Hawaii$Birds, xlab="Year", ylab="Abundance")
+
+library(nlme)
+M0 <- gls(Birds ~ Rainfall + Year, na.action=na.omit, data=Hawaii)
+summary(M0)
+E <- residuals(M0, type="normalized")
+I <- !is.na(Hawaii$Birds)
+plot(Hawaii$Year[I], E, ylab="residuals")
+plot(ACF(M0),alpha=0.05)
+
+M2 <- gls(Birds ~ Rainfall+Year, na.action=na.omit, correlation=corAR1(form=~Year), data=Hawaii)
+summary(M2)
+
+# ARMA error structures
+cs1 <- corARMA(c(0.2), p=1, q=0)
+cs2 <- corARMA(c(0.3, -0.3), p=2, q=0) 
+M3arma1 <- gls(Birds~Rainfall+Year, na.action=na.omit, correlation=cs1, data=Hawaii)
+M3arma2 <- gls(Birds~Rainfall+Year, na.action=na.omit, correlation=cs2, data=Hawaii)
+AIC(M3arma1, M3arma2)
