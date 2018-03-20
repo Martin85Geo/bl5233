@@ -30,16 +30,16 @@ xyplot(follicles ~ Time, data=data, groups=factor(Mare), xlab="Time", ylab="Foll
 library(nlme)
 model0 <- lme(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), data=data, random=~1|Mare)
 summary(model0)
+
+# 3. Investigate the autocorrelation structure of the residuals of the model just fitted
+# and plot it.
+
 E <- residuals(model0, type="normalized")
 I <- data$follicles
 plot(data$Time[I], E, ylab="residuals")
 plot(ACF(model0), alpha=0.05)
 
-# 3. Investigate the autocorrelation structure of the residuals of the model just fitted
-# and plot it.
-
-
-
+# Note: the ACF plot indicates there is significant correlation for a lag of 1
 
 # 4. Fit different models considering different ARMA correlation structures with 
 # autoregression and moving average coefficients ranging from 0 to 2. Compare the models
