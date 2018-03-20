@@ -18,8 +18,8 @@ setwd("/Users/dondealban/Desktop/BL5233/Datasets/")
 data <- read.table(file="Ovary.txt", header=TRUE, sep="\t")
 names(data)
 library(lattice)
-xyplot(follicles~Time, data=data) # w/o groups
-xyplot(follicles~Time, data=data, groups=factor(Mare), xlab="Time", ylab="Follicles") # w mares as group
+xyplot(follicles ~ Time, data=data) # w/o groups
+xyplot(follicles ~ Time, data=data, groups=factor(Mare), xlab="Time", ylab="Follicles") # w mares as group
 
 # 2. We would expect the dependent variable to be correlated in time. Let’s start by 
 # fitting a model that ignores temporal correlation. We start by fitting a linear 
@@ -28,4 +28,12 @@ xyplot(follicles~Time, data=data, groups=factor(Mare), xlab="Time", ylab="Follic
 # the errors are nested within mare.
 
 library(nlme)
-model0 <- lme(follicles~Time, data=data, random=~1|Mare)
+model0 <- lme(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), data=data, random=~1|Mare)
+summary(model0)
+E <- residuals(model0, type="normalized")
+I <- data$follicles
+plot(data$Time[I], E, ylab="residuals")
+plot(ACF(model0), alpha=0.05)
+
+
+
