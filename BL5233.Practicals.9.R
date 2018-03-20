@@ -35,5 +35,13 @@ I <- data$follicles
 plot(data$Time[I], E, ylab="residuals")
 plot(ACF(model0), alpha=0.05)
 
+# 3. Investigate the autocorrelation structure of the residuals of the model just fitted
+# and plot it.
 
+
+
+
+# 4. Fit different models considering different ARMA correlation structures with 
+# autoregression and moving average coefficients ranging from 0 to 2. Compare the models
+# with AIC and choose an adequate correlation structure.
 
