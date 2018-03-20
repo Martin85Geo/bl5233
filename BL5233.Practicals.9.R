@@ -51,3 +51,22 @@ summary(model1) # AIC=1602.387
 # autoregression and moving average coefficients ranging from 0 to 2. Compare the models
 # with AIC and choose an adequate correlation structure.
 
+
+
+
+
+cs1 <- corARMA(p=0, q=0)
+cs2 <- corARMA(p=1, q=0)
+cs3 <- corARMA(p=2, q=0)
+
+
+
+
+# cs1 <- corARMA(c(0.2), p = 1, q = 0)
+# cs2 <- corARMA(c(0.3, -0.3), p = 2, q = 0) 
+# M3arma1<-gls(Birds~Rainfall+Year, na.action=na.omit, correlation=cs1, data=Hawaii)
+# M3arma2<-gls(Birds~Rainfall+Year, na.action=na.omit, correlation=cs2, data=Hawaii)
+# AIC(M3arma1,M3arma2)
+
+
+
