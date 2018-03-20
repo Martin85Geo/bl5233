@@ -17,3 +17,13 @@
 setwd("/Users/dondealban/Desktop/BL5233/Datasets/")
 data <- read.table(file="Ovary.txt", header=TRUE, sep="\t")
 names(data)
+library(lattice)
+xyplot(follicles ~ Time, data=data, groups=factor(Mare))
+xyplot(follicles ~ Time, data=data)
+
+# 2. We would expect the dependent variable to be correlated in time. Let’s start by 
+# fitting a model that ignores temporal correlation. We start by fitting a linear 
+# mixed-effects model (lme function from the nlme package that needs to be loaded). The
+# only thing new is to introduce a new argument “random =~1|Mare”. This just means that 
+# the errors are nested within mare.
+
