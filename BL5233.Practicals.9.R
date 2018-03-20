@@ -10,6 +10,10 @@
 # the nested structure (this is pretty similar to what we were doing with split-plot 
 # ANOVAs). 
 
+# 1. Read the dataset Ovary in. Create an exploratory plot in which the number of 
+# follicles are plotted against time for each mare (hint: use xyplot() from the lattice 
+# library).
+
 setwd("/Users/dondealban/Desktop/BL5233/Datasets/")
-data <- read.table(file="ParasiteCod.txt", header=TRUE, sep="\t")
+data <- read.table(file="Ovary.txt", header=TRUE, sep="\t")
 names(data)
