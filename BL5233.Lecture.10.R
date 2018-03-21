@@ -46,3 +46,45 @@ AIC(B1.gls,B1A,B1C,B1D,B1E)
 # we need to correct for spatial correlation. B1C and B1E (corRatio and corExp) present 
 # the lowest AICs and are the better candidates.
 
+Vario1E <- Variogram(B1E, form =~ x + y, robust = TRUE, maxDist = 2000, resType = "pearson")
+plot(Vario1E,smooth=FALSE)
+                       
+Vario2E <- Variogram(B1E,form =~ x + y, maxDist = 2000, resType = "normalized")
+plot(Vario2E, smooth = FALSE)
+
+# Example: acid-sensitive rivers
+library(geoR)
+SDI2003 <- read.table(file="SDI2003.txt", header=TRUE, sep="\t")
+coords <- matrix(0, length(SDI2003$pH),2)
+
+coords[,1] <- SDI2003$Easting
+coords[,2] <- SDI2003$Northing
+gb <- list(data=SDI2003$pH, coords=coords)
+plot(variog(gb, max.dist=200000))
+
+SDI2003$fForested <- factor(SDI2003$Forested)
+SDI2003$LAltitude <- log(SDI2003$Altitude)
+M1 <- gls(pH~SDI*fForested*LAltitude, data = SDI2003)
+Vario1 <- Variogram(M1,form =~ Easting+Northing, data=SDI2003, nugget=T, maxDist=200000)
+plot(Vario1)
+
+M1A <- gls(pH ~ SDI*fForested*LAltitude, correlation=corSpher(form =~ Easting+Northing, nugget=TRUE), data=SDI2003)
+M1B <- gls(pH ~ SDI*fForested*LAltitude, correlation=corLin(form =~ Easting+Northing, nugget=TRUE), data=SDI2003)
+M1C <- gls(pH ~ SDI*fForested*LAltitude, correlation=corRatio(form =~ Easting+Northing, nugget=TRUE), data=SDI2003)
+M1D <- gls(pH ~ SDI*fForested*LAltitude, correlation=corGaus(form =~ Easting+Northing, nugget=TRUE), data=SDI2003)
+M1E <- gls(pH~SDI*Forested*LAltitude, correlation=corExp(form =~ Easting+Northing, nugget=TRUE), data=SDI2003)
+AIC(M1,M1A,M1B,M1C,M1D,M1E)
+
+Vario1C <- Variogram(M1C,form =~ Easting + Northing, data=SDI2003, nugget=T,maxDist=200000, resType="normalized")
+plot(Vario1C, smooth=FALSE)
+
+# Another example...
+library(gstat)
+E <- resid(M1C,type="normalized")
+mydata <- data.frame(E,SDI2003$Easting, SDI2003$Northing)
+coordinates(mydata)<- c("SDI2003.Easting","SDI2003.Northing")
+bubble(mydata,"E",col=c("black","grey"), main="Normalised residuals", xlab="X-coordinates",ylab="Y-coordinates")
+
+# Continue example at home...
+
+
