@@ -36,3 +36,26 @@ p2 <- ggplot() + geom_bar(aes(y=MeanYield, x=Block), data=yieldblock, stat="iden
 # model that accounts for nestedness within block. Compare the models to see if accounting
 # for nestedness is necessary.
 
+model <- formula(yield~Block)
+
+m0 <- gls(model, data=data)
+m1 <- gls(model, correlation=corSpher(form=~longitude+latitude, nugget=T), data=data)
+m2 <- gls(model, correlation=corLin(form=~longitude+latitude, nugget=T), data=data)
+m3 <- gls(model, correlation=corRatio(form=~longitude+latitude, nugget=T), data=data)
+m4 <- gls(model, correlation=corGaus(form=~longitude+latitude, nugget=T), data=data)
+m5 <- gls(model, correlation=corExp(form=~longitude+latitude, nugget=T), data=data)
+
+AIC(m0,m1,m2,m3,m4,m5)
+
+  # Results of AIC Comparison
+  # df      AIC
+  # m0  3 1511.669
+  # m1  5 1355.621
+  # m2  5 1360.188
+  # m3  5 1353.726
+  # m4  5 1355.580
+  # m5  5 1355.621
+
+
+
+
