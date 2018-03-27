@@ -19,5 +19,20 @@ model0 <- gls(yield~Block, data=data)
 plot(Variogram(model0, form=~data$latitude + data$longitude))
 
 # 3. Develop a barplot to study the difference in mean yield among wheat varieties. Also 
-#the mean yield per block.
+# the mean yield per block.
+
+library(ggplot2)
+
+yieldvars <- aggregate(data[,3], list(data$variety), mean)
+colnames(yieldvars) <- c("Variety","MeanYield")
+p1 <- ggplot() + geom_bar(aes(y=MeanYield, x=Variety), data=yieldvars, stat="identity")
+p1 <- p1 + theme(axis.text.x = element_text(angle=90, hjust=1))
+
+yieldblock <- aggregate(data[,3], list(data$Block), mean)
+colnames(yieldblock) <- c("Block","MeanYield")
+p2 <- ggplot() + geom_bar(aes(y=MeanYield, x=Block), data=yieldblock, stat="identity")
+
+# 4. Fit a GLS model ignoring spatial correlation and nestedness. Then fit a mixed-effects
+# model that accounts for nestedness within block. Compare the models to see if accounting
+# for nestedness is necessary.
 
