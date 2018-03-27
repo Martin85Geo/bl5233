@@ -9,6 +9,15 @@
 # 1. Load package nlme. Read dataset “spatialdata” into R. Explore the names of the variables.
 
 setwd("/Users/dondealban/Desktop/BL5233/Datasets/")
+library(nlme)
 data <- read.table(file="spatialdata.txt", header=TRUE, sep="\t")
 names(data)
+
+# 2. Develop a two sub-plot graph to explore the effects of latitude and longitude on yield.
+
+model0 <- gls(yield~Block, data=data)
+plot(Variogram(model0, form=~data$latitude + data$longitude))
+
+# 3. Develop a barplot to study the difference in mean yield among wheat varieties. Also 
+#the mean yield per block.
 
