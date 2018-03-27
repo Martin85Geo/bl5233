@@ -56,6 +56,18 @@ AIC(m0,m1,m2,m3,m4,m5)
   # m4  5 1355.580
   # m5  5 1355.621
 
+# The model m0 that does not consider spatial correlation has the highest AIC. Subsequent
+# models that account for spatial correlation show improvements, specifically model m3 using
+# ratio correlation, which shows the most adequate spatial correlation structure.
+
+# Nested within Block using LME
+# m1n <- gls(model, correlation=corSpher(form=~longitude+latitude | Block, nugget=T), data=data)
+# m2n <- gls(model, correlation=corLin(form=~longitude+latitude | Block, nugget=T), data=data)
+# m3n <- gls(model, correlation=corRatio(form=~longitude+latitude | Block, nugget=T), data=data)
+# m4n <- gls(model, correlation=corGaus(form=~longitude+latitude | Block, nugget=T), data=data)
+# m5n <- gls(model, correlation=corExp(form=~longitude+latitude | Block, nugget=T), data=data)
+
+
 
 
 
