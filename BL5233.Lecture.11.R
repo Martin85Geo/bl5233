@@ -48,4 +48,10 @@ library(glmmML)
 DE.glmmML<-glmmML(Ecervi.01 ~ CLength * fSex, cluster = fFarm, family=binomial, data = DeerEcervi)
 summary(DE.glmmML)
 
+# Homework!
+# Information-theoretic model selection: koalas in fragmented landscapes
+
+
+
+
 
