@@ -43,3 +43,5 @@ model <- prcomp(pgd,scale=T)
 plot(model$x[,1],model$x[,2],pch=19,xlab="PC1",ylab= "PC2")
 summary(model)
 plot(model)
+
+biplot(model)
