@@ -53,5 +53,14 @@ library(MASS)
 data(varespec)
 varespec
 
+# using vegan package
 vare.dis <- vegdist(varespec)
 vare.dis
+vare.mds0 <- isoMDS(vare.dis)
+vare.mds0
+stressplot(vare.mds0, vare.dis)
+ordiplot(vare.mds0, type="t")
+
+vare.mds <- metaMDS(varespec, trace=FALSE)
+vare.mds
+ordiplot(vare.mds, type="t")
