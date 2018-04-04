@@ -45,3 +45,13 @@ summary(model)
 plot(model)
 
 biplot(model)
+
+# Non-metric multidimensional scaling
+install.packages("vegan")
+library(vegan) 
+library(MASS)
+data(varespec)
+varespec
+
+vare.dis <- vegdist(varespec)
+vare.dis
