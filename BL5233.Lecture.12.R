@@ -98,4 +98,33 @@ table(unused$Taxon)
 
 # Direct comparison/constrained ordination
 
+# Canonical correspondence analysis
+library(vegan)
+data(mite)
+data(mite.env)
+data(mite.xy)
+plot(mite.env, gap=0,panel=panel.smooth)
+
+model0 <- cca(mite)
+model1 <- cca(mite, mite.env) # throws an error
+model1 <- cca(mite ~ SubsDens + WatrCont + Substrate + Shrub + Topo, data=mite.env)
+
+model0
+model1
+
+head(summary(model1))
+plot(model1)
+
+plot(model1, dis=c("wa","lc"))
+ordispider(model1)
+
+plot(procrustes(model0, model1))
+
+# Model selection
+m1 <- cca(mite ~ ., mite.env)
+m0 <- cca(mite ~ 1, mite.env)
+
+m <- step(m0, scope=formula(m1), test="perm")
+mback <- step(m1, test="perm")
+
 
