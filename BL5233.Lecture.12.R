@@ -127,4 +127,21 @@ m0 <- cca(mite ~ 1, mite.env)
 m <- step(m0, scope=formula(m1), test="perm")
 mback <- step(m1, test="perm")
 
+m <- ordistep(m0, scope=formula(m1))
+m$anova
 
+# Collinearlity
+vif.cca(model1)
+
+# Manual updating of a model
+m <- update(m, . ~ . - Shrub)
+drop1(m, test="perm")
+
+# Conditioned on partial ordination
+m <- cca(mite ~ SubsDens + WatrCont + Substrate + Shrub + Topo +
+           Condition(mite.xy$x + mite.xy$y), data=mite.env)
+m
+
+mod <- varpart(mite, ~SubsDens, ~ Substrate +Shrub, data = mite.env)
+mod
+showvarparts(2)
