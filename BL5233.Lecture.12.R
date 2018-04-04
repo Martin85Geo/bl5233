@@ -64,3 +64,38 @@ ordiplot(vare.mds0, type="t")
 vare.mds <- metaMDS(varespec, trace=FALSE)
 vare.mds
 ordiplot(vare.mds, type="t")
+
+
+# Interpretation and forecasting
+
+# Indirect comparison
+
+yv <- predict(model)[,1]
+yv2 <- predict(model)[,2]
+par(mfrow=c(2,2)) 
+plot(pgdata$hay,yv,pch=16,xlab='biomass',ylab="PC 1")
+plot(pgdata$pH,yv2,pch=16,xlab='soil pH',ylab="PC 2")
+par(mfrow=c(1,1)) 
+
+# Linear discriminant analysis
+library(MASS)
+taxa = taxonomy[,-1]
+Taxon = taxonomy$Taxon
+model <- lda(Taxon ~.,taxa)
+plot(model,col=rep(1:4 ,each=30))
+predict(model)
+
+train <- sort(sample(1:120,60))
+table(Taxon[train])
+
+model2 <- lda(Taxon ~., taxa, subset=train)
+predict(model2)
+
+unused <- taxa[-train,]
+predict(model,unused)$class
+
+table(unused$Taxon)
+
+# Direct comparison/constrained ordination
+
+
