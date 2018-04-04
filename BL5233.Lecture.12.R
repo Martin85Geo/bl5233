@@ -1,58 +1,45 @@
-# GLMM
+# Multivariate Analysis
 
+# Cluster analysis: k-means
 setwd("/Users/dondealban/Desktop/BL5233/Datasets/")
-# Squid <- read.table(file="Squid.txt", header=TRUE, sep="\t")
-# names(Squid)
+kmd <- read.table(file="kmeansdata.txt", header=TRUE, sep="\t")
+attach(kmd)
+names(kmd)
+graphics.off()
+plot(x,y,col=group,pch=16)
 
-# Bacteria example with binary data
-library(MASS)
-data(bacteria)
-names(bacteria)
+par(mfrow=c(2,2))
+plot(x,y,pch=16,main='Ungrouped')
+plot(x,y,col=group,pch=16,main='Tr ue groups (6)')
+model <- kmeans(data.frame(x,y),6)
+plot(x,y,col=model[[1]],main='kmea ns with 6 groups')
+model <- kmeans(data.frame(x,y),4)
+plot(x,y,col=model[[1]],main='kmea ns with 4 groups')
+par(mfrow=c(1,1))
 
-bacteria$y <- 1*(bacteria$y=="y")
+model <- kmeans(data.frame(x,y), 6)
+table(model[[1]],group)
 
-library(lme4)
-model1 <- glmer(y~trt+(week|ID), family=binomial, nAGQ=1, data=bacteria)
-summary(model1)
+taxonomy <- read.table('taxonomy.txt',header=T)
+attach(taxonomy) 
+names(taxonomy)
+pairs(taxonomy)
 
-model2 <- glmer(y~trt+(1|ID), family=binomial, nAGQ=1, data=bacteria)
-anova(model1, model2)
-
-model3 <- glmer(y~1+(week|ID), family=binomial, nAGQ=1, data=bacteria)
-anova(model1, model3)
-
-# Deer example
-DeerEcervi <- read.table(file="DeerEcervi.txt", header=TRUE, sep="\t")
-names(DeerEcervi)
-
-#convert Ecervi into binary variable
-DeerEcervi$Ecervi.01 <- DeerEcervi$Ecervi
-DeerEcervi$Ecervi.01[DeerEcervi$Ecervi>0] <- 1
-#convert sex and farm into factors
-DeerEcervi$fSex <- factor(DeerEcervi$Sex)
-DeerEcervi$fFarm <- factor(DeerEcervi$Farm)
-#center length
-DeerEcervi$CLength <- DeerEcervi$Length -
-mean(DeerEcervi$Length)
-
-DE.PQL <- glmmPQL(Ecervi.01 ~ CLength * fSex, random=~1|fFarm, family=binomial, data=DeerEcervi)
-summary(DE.PQL)
-(DE.PQL$sigma)^2
-
-library(lme4)
-DE.lme4 <- glmer(Ecervi.01 ~ CLength * fSex +(1|fFarm), family=binomial, data=DeerEcervi)
-summary(DE.lme4)
-
-install.packages("glmmML")
-library(glmmML)
-DE.glmmML<-glmmML(Ecervi.01 ~ CLength * fSex, cluster = fFarm, family=binomial, data = DeerEcervi)
-summary(DE.glmmML)
-
-# Homework!
-# Information-theoretic model selection: koalas in fragmented landscapes
+kmeans(taxonomy, 4)
+kmeans(taxonomy[,-1],3)
 
 
-# MCMC
+# Principal components analysis
+pgdata <- read.table("pgfull.txt",header=T)
+names(pgdata)
+plot(pgdata$AC,pgdata$AE)
 
+install.packages("scatterplot3d", dependencies = TRUE)
+library(scatterplot3d)
+scatterplot3d(pgdata$AC,pgdata$AE,pgdata$AM,highlight.3d=T,pch=19)
 
-
+pgd <- pgdata[,1:54]
+model <- prcomp(pgd,scale=T)
+plot(model$x[,1],model$x[,2],pch=19,xlab="PC1",ylab= "PC2")
+summary(model)
+plot(model)
