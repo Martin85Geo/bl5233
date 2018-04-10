@@ -6,3 +6,10 @@
 # The goal of the exercise is to see whether the individual birds can be separated into 
 # groups based on the characteristics of their vocalizations.
 
+data <- read.table(file="vocalisation_data.txt", header=TRUE, sep="\t")
+names(data)
+
+# 1. Do a principal components analysis on the vocalization data (note that the dataset
+# is also tab delimited). What proportion of the variance is explained by the first 
+# principal component? How many principal components do you need to explain ~ 95% of the 
+# variance?
